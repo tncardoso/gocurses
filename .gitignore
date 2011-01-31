@@ -1,0 +1,8 @@
+*.c
+*.o
+*.6
+*.h
+sample
+*.cgo*
+_obj/
+*_gotypes.go
