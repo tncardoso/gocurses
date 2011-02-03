@@ -148,6 +148,37 @@ func (win *Window) Getmaxyx () (row, col int) {
     return row, col
 }
 
+func (win *Window) Setscrreg (top, bot int) () {
+    C.wsetscrreg((*C.WINDOW)(win), C.int(top), C.int(bot))
+}
+
+func (win *Window) Addstr (str ... interface{}) () {
+    res := (*C.char) (C.CString(fmt.Sprint(str...)))
+    defer C.free(unsafe.Pointer(res))
+    C.waddstr((*C.WINDOW)(win), res)
+}
+
+func (win *Window) Mvaddstr (y, x int, str ... interface{}) () {
+    res := (*C.char) (C.CString(fmt.Sprint(str...)))
+    defer C.free(unsafe.Pointer(res))
+    C.mvwaddstr((*C.WINDOW)(win), C.int(y), C.int(x), res)
+}
+
+// Hardware insert/delete feature.
+func (win *Window) Idlok (bf bool) () {
+    C.idlok((*C.WINDOW)(win), C.bool(bf))
+}
+
+// Enable window scrolling.
+func (win *Window) Scrollok (bf bool) () {
+    C.scrollok((*C.WINDOW)(win), C.bool(bf))
+}
+
+// Scroll given window.
+func (win *Window) Scroll () () {
+    C.scroll((*C.WINDOW)(win))
+}
+
 // Get terminal size.
 func Getmaxyx () (row, col int) {
     row = int(C.LINES)
