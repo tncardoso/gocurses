@@ -8,5 +8,5 @@ include $(GOROOT)/src/Make.pkg
 
 sample: *.go
 	$(GC) sample.go
-	$(LD) -o sample sample.6
+	$(LD) -o sample sample.$(O)
 

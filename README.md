@@ -31,4 +31,9 @@ Requirements
 Instalation
 -------
 
-    $ goinstall github.com/thiagoncc/curses.go
+goinstall can't install cgo packages, therefore you should clone the
+repos and call gomake install instead.
+
+    $ git clone git://github.com/thiagoncc/curses.go.git
+    $ cd curses.go
+    $ gomake install
