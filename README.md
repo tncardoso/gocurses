@@ -7,6 +7,7 @@ Sample
 -------
     func main() {
         curses.Initscr()
+        defer curses.End()
         curses.Cbreak()
         curses.Noecho()
         curses.Stdscr.Keypad(true)
@@ -20,7 +21,6 @@ Sample
         wind.Refresh()
         
         curses.Stdscr.Getch()
-        curses.End()
     }
 
 Requirements
@@ -31,8 +31,13 @@ Requirements
 Instalation
 -------
 
-goinstall can't install cgo packages, therefore you should clone the
-repos and call gomake install instead.
+goinstall is now supporting cgo packages, therefore installing curses.go
+should be as easy as:
+
+    $ goinstall github.com/thiagoncc/curses.go
+
+If you have problems with goinstall, you can update your go release or
+clone the repository:
 
     $ git clone git://github.com/thiagoncc/curses.go.git
     $ cd curses.go
