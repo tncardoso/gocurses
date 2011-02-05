@@ -1,5 +1,6 @@
 package curses
 
+// #cgo LDFLAGS: -lncurses
 // #include <stdlib.h>
 // #include <ncurses.h>
 // void Printw (const char* str) { printw (str); } 
