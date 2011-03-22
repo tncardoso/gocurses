@@ -28,7 +28,7 @@ Requirements
 
 * [libncurses](http://ftp.gnu.org/pub/gnu/ncurses/) -- ncurses library
 
-Instalation
+Installation
 -------
 
 goinstall is now supporting cgo packages, therefore installing curses.go
