@@ -5,6 +5,10 @@ GO binding for ncurses.
 
 Sample
 -------
+    package main
+
+    import "github.com/tncardoso/curses.go"
+
     func main() {
         curses.Initscr()
         defer curses.End()
@@ -13,7 +17,7 @@ Sample
         curses.Stdscr.Keypad(true)
         
         curses.Attron(curses.A_BOLD)
-        curses.Printw("Hello World!")
+        curses.Addstr("Hello World!")
         curses.Refresh()
 
         wind := curses.NewWindow(10,40,10,10)
@@ -34,11 +38,11 @@ Installation
 goinstall is now supporting cgo packages, therefore installing curses.go
 should be as easy as:
 
-    $ goinstall github.com/thiagoncc/curses.go
+    $ goinstall github.com/tncardoso/curses.go
 
 If you have problems with goinstall, you can update your go release or
 clone the repository:
 
-    $ git clone git://github.com/thiagoncc/curses.go.git
+    $ git clone git://github.com/tncardoso/curses.go.git
     $ cd curses.go
     $ gomake install
