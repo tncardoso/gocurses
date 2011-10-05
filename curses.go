@@ -70,6 +70,23 @@ func Attroff(attr int) {
     C.attroff(C.int(attr))
 }
 
+// Set attribute
+func Attrset(attr int) {
+	C.attrset(C.int(attr))
+}
+
+func (win *Window) Attron(attr int) {
+	C.wattron((*C.WINDOW)(win), C.int(attr))
+}
+
+func (win *Window) Attroff(attr int) {
+	C.wattroff((*C.WINDOW)(win), C.int(attr))
+}
+
+func (win *Window) Attrset(attr int) {
+	C.wattrset((*C.WINDOW)(win), C.int(attr))
+}
+
 // Refresh screen.
 func Refresh() {
     C.refresh()
