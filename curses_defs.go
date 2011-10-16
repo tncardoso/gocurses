@@ -41,9 +41,9 @@ const (
 // Keys
 const (
     KEY_DOWN  = C.KEY_DOWN
-    KEY_UP    = C.KEY_DOWN
-    KEY_LEFT  = C.KEY_DOWN
-    KEY_RIGHT = C.KEY_DOWN
+    KEY_UP    = C.KEY_UP
+    KEY_LEFT  = C.KEY_LEFT
+    KEY_RIGHT = C.KEY_RIGHT
 )
 
 // Error return value
