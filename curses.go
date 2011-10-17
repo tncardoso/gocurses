@@ -154,6 +154,14 @@ func Mvaddstr(y, x int, str ...interface{}) {
     C.mvaddstr(C.int(y), C.int(x), res)
 }
 
+func Addch(ch int) {
+	C.addch(C.chtype(ch))
+}
+
+func Mvaddch(y, x int, ch int) {
+	C.mvaddch(C.int(y), C.int(x), C.chtype(ch))
+}
+
 func (win *Window) Addstr(str ...interface{}) {
     res := (*C.char)(C.CString(fmt.Sprint(str...)))
     defer C.free(unsafe.Pointer(res))
@@ -164,6 +172,14 @@ func (win *Window) Mvaddstr(y, x int, str ...interface{}) {
     res := (*C.char)(C.CString(fmt.Sprint(str...)))
     defer C.free(unsafe.Pointer(res))
     C.mvwaddstr((*C.WINDOW)(win), C.int(y), C.int(x), res)
+}
+
+func (win *Window) Addch(ch int) {
+	C.waddch((*C.WINDOW)(win), C.chtype(ch))
+}
+
+func (win *Window) Mvaddch(y, x int, ch int) {
+	C.mvwaddch((*C.WINDOW)(win), C.int(y), C.int(x), C.chtype(ch))
 }
 
 // Hardware insert/delete feature.
