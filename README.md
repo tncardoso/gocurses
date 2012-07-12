@@ -7,7 +7,7 @@ Sample
 -------
     package main
 
-    import "github.com/tncardoso/curses.go"
+    import "github.com/tncardoso/gocurses"
 
     func main() {
         curses.Initscr()
@@ -35,14 +35,14 @@ Requirements
 Installation
 -------
 
-goinstall is now supporting cgo packages, therefore installing curses.go
+goinstall is now supporting cgo packages, therefore installing gocurses
 should be as easy as:
 
-    $ goinstall github.com/tncardoso/curses.go
+    $ go get github.com/tncardoso/gocurses
 
-If you have problems with goinstall, you can update your go release or
+If you have problems with go get, you can update your go release or
 clone the repository:
 
-    $ git clone git://github.com/tncardoso/curses.go.git
-    $ cd curses.go
-    $ gomake install
+    $ git clone git://github.com/tncardoso/gocurses.git
+    $ cd gocurses
+    $ go install

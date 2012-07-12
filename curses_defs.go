@@ -1,4 +1,4 @@
-package curses
+package gocurses
 
 // #include <ncurses.h>
 import "C"

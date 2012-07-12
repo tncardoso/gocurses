@@ -1,6 +1,6 @@
 package main
 
-import "github.com/thiagoncc/curses"
+import "github.com/tncardoso/gocurses"
 
 const (
     windowHeight = 20

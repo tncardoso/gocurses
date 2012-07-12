@@ -1,4 +1,4 @@
-package curses
+package gocurses
 
 // #cgo LDFLAGS: -lncurses
 // #include <stdlib.h>
@@ -12,15 +12,17 @@ import "unsafe"
 import "fmt"
 
 // Curses window type.
-type Window C.WINDOW
+type Window struct {
+    cwin *C.WINDOW
+}
 
 // Standard window.
-var Stdscr *Window = (*Window)(C.stdscr)
+var Stdscr Window = Window{cwin: C.stdscr}
 
 // Initializes curses.
 // This function should be called before using the package.
 func Initscr() *Window {
-    Stdscr = (*Window)(C.initscr())
+    Stdscr = Window{cwin: C.stdscr}
     return Stdscr
 }
 
@@ -46,13 +48,13 @@ func Noecho() {
 }
 
 // Enable reading of function keys.
-func (win *Window) Keypad(on bool) {
-    C.keypad((*C.WINDOW)(win), C.bool(on))
+func (window *Window) Keypad(on bool) {
+    C.keypad(window.cwin, C.bool(on))
 }
 
 // Get char from the standard in.
-func (win *Window) Getch() int {
-    return int(C.wgetch((*C.WINDOW)(win)))
+func (window *Window) Getch() int {
+    return int(C.wgetch(window.cwin))
 }
 
 // Get char from the standard in.
@@ -75,16 +77,16 @@ func Attrset(attr int) {
 	C.attrset(C.int(attr))
 }
 
-func (win *Window) Attron(attr int) {
-	C.wattron((*C.WINDOW)(win), C.int(attr))
+func (window *Window) Attron(attr int) {
+	C.wattron(window.cwin, C.int(attr))
 }
 
-func (win *Window) Attroff(attr int) {
-	C.wattroff((*C.WINDOW)(win), C.int(attr))
+func (window *Window) Attroff(attr int) {
+	C.wattroff(window.cwin, C.int(attr))
 }
 
-func (win *Window) Attrset(attr int) {
-	C.wattrset((*C.WINDOW)(win), C.int(attr))
+func (window *Window) Attrset(attr int) {
+	C.wattrset(window.cwin, C.int(attr))
 }
 
 // Refresh screen.
@@ -93,8 +95,8 @@ func Refresh() {
 }
 
 // Refresh given window.
-func (win *Window) Refresh() {
-    C.wrefresh((*C.WINDOW)(win))
+func (window *Window) Refresh() {
+    C.wrefresh(window.cwin)
 }
 
 // Finalizes curses.
@@ -109,8 +111,8 @@ func NewWindow(height, width, starty, startx int) *Window {
 }
 
 // Set box lines.
-func (win *Window) Box(v, h int) {
-    C.box((*C.WINDOW)(win), C.chtype(v), C.chtype(h))
+func (window *Window) Box(v, h int) {
+    C.box(window.cwin, C.chtype(v), C.chtype(h))
 }
 
 // Set border characters.
@@ -122,24 +124,24 @@ func (win *Window) Box(v, h int) {
 // 6. tr: character to be used for the top right corner of the window 
 // 7. bl: character to be used for the bottom left corner of the window 
 // 8. br: character to be used for the bottom right corner of the window
-func (win *Window) Border(ls, rs, ts, bs, tl, tr, bl, br int) {
-    C.wborder((*C.WINDOW)(win), C.chtype(ls), C.chtype(rs), C.chtype(ts), C.chtype(bs), C.chtype(tl), C.chtype(tr), C.chtype(bl), C.chtype(br))
+func (window *Window) Border(ls, rs, ts, bs, tl, tr, bl, br int) {
+    C.wborder(window.cwin, C.chtype(ls), C.chtype(rs), C.chtype(ts), C.chtype(bs), C.chtype(tl), C.chtype(tr), C.chtype(bl), C.chtype(br))
 }
 
 // Delete current window.
-func (win *Window) Del() {
-    C.delwin((*C.WINDOW)(win))
+func (window *Window) Del() {
+    C.delwin(window.cwin)
 }
 
 // Get windows sizes.
-func (win *Window) Getmaxyx() (row, col int) {
-    row = int(C.getmaxy((*C.WINDOW)(win)))
-    col = int(C.getmaxx((*C.WINDOW)(win)))
+func (window *Window) Getmaxyx() (row, col int) {
+    row = int(C.getmaxy(window.cwin))
+    col = int(C.getmaxx(window.cwin))
     return row, col
 }
 
-func (win *Window) Setscrreg(top, bot int) {
-    C.wsetscrreg((*C.WINDOW)(win), C.int(top), C.int(bot))
+func (window *Window) Setscrreg(top, bot int) {
+    C.wsetscrreg(window.cwin, C.int(top), C.int(bot))
 }
 
 func Addstr(str ...interface{}) {
@@ -162,39 +164,39 @@ func Mvaddch(y, x int, ch int) {
 	C.mvaddch(C.int(y), C.int(x), C.chtype(ch))
 }
 
-func (win *Window) Addstr(str ...interface{}) {
+func (window *Window) Addstr(str ...interface{}) {
     res := (*C.char)(C.CString(fmt.Sprint(str...)))
     defer C.free(unsafe.Pointer(res))
-    C.waddstr((*C.WINDOW)(win), res)
+    C.waddstr(window.cwin, res)
 }
 
-func (win *Window) Mvaddstr(y, x int, str ...interface{}) {
+func (window *Window) Mvaddstr(y, x int, str ...interface{}) {
     res := (*C.char)(C.CString(fmt.Sprint(str...)))
     defer C.free(unsafe.Pointer(res))
-    C.mvwaddstr((*C.WINDOW)(win), C.int(y), C.int(x), res)
+    C.mvwaddstr(window.cwin, C.int(y), C.int(x), res)
 }
 
-func (win *Window) Addch(ch int) {
-	C.waddch((*C.WINDOW)(win), C.chtype(ch))
+func (window *Window) Addch(ch int) {
+	C.waddch(window.cwin, C.chtype(ch))
 }
 
-func (win *Window) Mvaddch(y, x int, ch int) {
-	C.mvwaddch((*C.WINDOW)(win), C.int(y), C.int(x), C.chtype(ch))
+func (window *Window) Mvaddch(y, x int, ch int) {
+	C.mvwaddch(window.cwin, C.int(y), C.int(x), C.chtype(ch))
 }
 
 // Hardware insert/delete feature.
-func (win *Window) Idlok(bf bool) {
-    C.idlok((*C.WINDOW)(win), C.bool(bf))
+func (window *Window) Idlok(bf bool) {
+    C.idlok(window.cwin, C.bool(bf))
 }
 
 // Enable window scrolling.
-func (win *Window) Scrollok(bf bool) {
-    C.scrollok((*C.WINDOW)(win), C.bool(bf))
+func (window *Window) Scrollok(bf bool) {
+    C.scrollok(window.cwin, C.bool(bf))
 }
 
 // Scroll given window.
-func (win *Window) Scroll() {
-    C.scroll((*C.WINDOW)(win))
+func (window *Window) Scroll() {
+    C.scroll(window.cwin)
 }
 
 // Get terminal size.
@@ -205,6 +207,6 @@ func Getmaxyx() (row, col int) {
 }
 
 // Erases content from cursor to end of line inclusive.
-func (win *Window) Clrtoeol() {
-    C.wclrtoeol((*C.WINDOW)(win))
+func (window *Window) Clrtoeol() {
+    C.wclrtoeol(window.cwin)
 }
