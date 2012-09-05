@@ -10,21 +10,21 @@ Sample
     import "github.com/tncardoso/gocurses"
 
     func main() {
-        curses.Initscr()
-        defer curses.End()
-        curses.Cbreak()
-        curses.Noecho()
-        curses.Stdscr.Keypad(true)
+        gocurses.Initscr()
+        defer gocurses.End()
+        gocurses.Cbreak()
+        gocurses.Noecho()
+        gocurses.Stdscr.Keypad(true)
         
-        curses.Attron(curses.A_BOLD)
-        curses.Addstr("Hello World!")
-        curses.Refresh()
+        gocurses.Attron(curses.A_BOLD)
+        gocurses.Addstr("Hello World!")
+        gocurses.Refresh()
 
-        wind := curses.NewWindow(10,40,10,10)
+        wind := gocurses.NewWindow(10,40,10,10)
         wind.Box(0,0)
         wind.Refresh()
         
-        curses.Stdscr.Getch()
+        gocurses.Stdscr.Getch()
     }
 
 Requirements

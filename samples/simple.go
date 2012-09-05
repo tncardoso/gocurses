@@ -1,6 +1,9 @@
 package main
 
-import "github.com/tncardoso/gocurses"
+import (
+    "fmt"
+    "github.com/tncardoso/gocurses"
+)
 
 const (
     windowHeight = 20
@@ -8,20 +11,21 @@ const (
 )
 
 func main() {
-    curses.Initscr()
-    defer curses.End()
-    curses.Cbreak()
-    curses.Noecho()
-    curses.Stdscr.Keypad(true)
+    fmt.Println("starting")
+    gocurses.Initscr()
+    defer gocurses.End()
+    gocurses.Cbreak()
+    gocurses.Noecho()
+    gocurses.Stdscr.Keypad(true)
 
-    y, x := curses.Getmaxyx()
-    curses.Addstr("Press any key to exit")
-    curses.Refresh()
+    y, x := gocurses.Getmaxyx()
+    gocurses.Addstr("Press any key to exit")
+    gocurses.Refresh()
 
-    window := curses.NewWindow(windowHeight, windowWidth, (y-windowHeight)/2, (x-windowWidth)/2)
+    window := gocurses.NewWindow(windowHeight, windowWidth, (y-windowHeight)/2, (x-windowWidth)/2)
     window.Box(0, 0)
     window.Mvaddstr(0, 1, "Sample")
     window.Refresh()
 
-    curses.Getch()
+    gocurses.Getch()
 }

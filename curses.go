@@ -3,10 +3,11 @@ package gocurses
 // #cgo LDFLAGS: -lncurses
 // #include <stdlib.h>
 // #include <ncurses.h>
-// void Printw (const char* str) { printw (str); } 
-// void Wprintw (WINDOW* win, const char* str) { wprintw (win, str); } 
-// void Mvprintw (int y, int x, const char* str) { mvprintw (y, x, str); } 
-// void Mvwprintw (WINDOW* win, int y, int x, const char* str) { mvwprintw (win, y, x, str); } 
+// int wrapper_getmaxx(WINDOW* win) { return getmaxx(win); }
+// int wrapper_getmaxy(WINDOW* win) { return getmaxy(win); }
+// void wrapper_wclrtoeol(WINDOW* win) { wclrtoeol(win); }
+// void wrapper_wattrset(WINDOW* win, int attr) { wattrset(win, attr); }
+//
 import "C"
 import "unsafe"
 import "fmt"
@@ -17,12 +18,12 @@ type Window struct {
 }
 
 // Standard window.
-var Stdscr Window = Window{cwin: C.stdscr}
+var Stdscr *Window = &Window{cwin: C.stdscr}
 
 // Initializes curses.
 // This function should be called before using the package.
 func Initscr() *Window {
-    Stdscr = Window{cwin: C.stdscr}
+    Stdscr.cwin = C.initscr()
     return Stdscr
 }
 
@@ -86,7 +87,7 @@ func (window *Window) Attroff(attr int) {
 }
 
 func (window *Window) Attrset(attr int) {
-	C.wattrset(window.cwin, C.int(attr))
+	C.wrapper_wattrset(window.cwin, C.int(attr))
 }
 
 // Refresh screen.
@@ -106,8 +107,10 @@ func End() {
 
 // Create new window.
 func NewWindow(height, width, starty, startx int) *Window {
-    return (*Window)(C.newwin(C.int(height), C.int(width),
-        C.int(starty), C.int(startx)))
+    w := new(Window)
+    w.cwin = C.newwin(C.int(height), C.int(width),
+        C.int(starty), C.int(startx))
+    return w
 }
 
 // Set box lines.
@@ -135,8 +138,8 @@ func (window *Window) Del() {
 
 // Get windows sizes.
 func (window *Window) Getmaxyx() (row, col int) {
-    row = int(C.getmaxy(window.cwin))
-    col = int(C.getmaxx(window.cwin))
+    row = int(C.wrapper_getmaxy(window.cwin))
+    col = int(C.wrapper_getmaxx(window.cwin))
     return row, col
 }
 
@@ -208,5 +211,5 @@ func Getmaxyx() (row, col int) {
 
 // Erases content from cursor to end of line inclusive.
 func (window *Window) Clrtoeol() {
-    C.wclrtoeol(window.cwin)
+    C.wrapper_wclrtoeol(window.cwin)
 }
