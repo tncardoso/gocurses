@@ -16,7 +16,7 @@ Sample
         gocurses.Noecho()
         gocurses.Stdscr.Keypad(true)
         
-        gocurses.Attron(curses.A_BOLD)
+        gocurses.Attron(gocurses.A_BOLD)
         gocurses.Addstr("Hello World!")
         gocurses.Refresh()
 
