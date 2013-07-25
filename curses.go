@@ -48,6 +48,10 @@ func Noecho() {
     C.noecho()
 }
 
+func Curs_set(i int) {
+  C.curs_set(C.int(i))
+}
+
 // Enable reading of function keys.
 func (window *Window) Keypad(on bool) {
     C.keypad(window.cwin, C.bool(on))

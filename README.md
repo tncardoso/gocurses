@@ -3,6 +3,9 @@ curses.go
 
 GO binding for ncurses.
 
+**This is a fork from https://github.com/tncardoso/gocurses **
+Used for a roguelike ( currently not on Github )
+
 Sample
 -------
     package main
