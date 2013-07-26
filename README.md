@@ -3,8 +3,17 @@ curses.go
 
 GO binding for ncurses.
 
-**This is a fork from https://github.com/tncardoso/gocurses **
+* This is a fork from https://github.com/tncardoso/gocurses
+
 Used for a roguelike ( currently not on Github )
+
+Added
+-----
+
+curs_set
+clear
+newpad
+prefresh
 
 Sample
 -------
