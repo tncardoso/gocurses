@@ -48,6 +48,7 @@ func Noecho() {
     C.noecho()
 }
 
+// Hides cursor if 0, visible if 1, very visible if 2
 func Curs_set(i int) {
   C.curs_set(C.int(i))
 }
@@ -216,4 +217,8 @@ func Getmaxyx() (row, col int) {
 // Erases content from cursor to end of line inclusive.
 func (window *Window) Clrtoeol() {
     C.wrapper_wclrtoeol(window.cwin)
+}
+
+func Clear() int {
+  return int(C.clear())
 }
