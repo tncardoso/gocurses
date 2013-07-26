@@ -105,6 +105,11 @@ func (window *Window) Refresh() {
     C.wrefresh(window.cwin)
 }
 
+// Refresh given window, for pads.
+func (window *Window) PRefresh(pminrow int, pmincol int, sminrow int, smincol int, smaxrow int, smaxcol int) {
+  C.prefresh(window.cwin,C.int(pminrow),C.int(pmincol),C.int(sminrow),C.int(smincol),C.int(smaxrow),C.int(smaxcol))
+}
+
 // Finalizes curses.
 func End() {
     C.endwin()
@@ -116,6 +121,13 @@ func NewWindow(height, width, starty, startx int) *Window {
     w.cwin = C.newwin(C.int(height), C.int(width),
         C.int(starty), C.int(startx))
     return w
+}
+
+// Create new pad.
+func NewPad(nlines int, ncols int) *Window {
+  w := new(Window)
+  w.cwin = C.newpad(C.int(nlines), C.int(ncols))
+  return w
 }
 
 // Set box lines.
