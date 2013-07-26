@@ -10,10 +10,10 @@ Used for a roguelike ( currently not on Github )
 Added
 -----
 
-curs_set
-clear
-newpad
-prefresh
+* curs_set
+* clear
+* newpad
+* prefresh
 
 Sample
 -------
