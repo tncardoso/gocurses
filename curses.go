@@ -106,7 +106,7 @@ func (window *Window) Refresh() {
 }
 
 // Refresh given window, for pads.
-func (window *Window) PRefresh(pminrow int, pmincol int, sminrow int, smincol int, smaxrow int, smaxcol int) {
+func (window *Window) PRefresh(pminrow,pmincol,sminrow,smincol, smaxrow, smaxcol int) {
   C.prefresh(window.cwin,C.int(pminrow),C.int(pmincol),C.int(sminrow),C.int(smincol),C.int(smaxrow),C.int(smaxcol))
 }
 
