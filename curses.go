@@ -180,7 +180,7 @@ func Addch(ch int) {
 	C.addch(C.chtype(ch))
 }
 
-func Mvaddch(y, x int, ch int) {
+func Mvaddch(y, x int, ch rune) {
 	C.mvaddch(C.int(y), C.int(x), C.chtype(ch))
 }
 
@@ -200,7 +200,7 @@ func (window *Window) Addch(ch int) {
 	C.waddch(window.cwin, C.chtype(ch))
 }
 
-func (window *Window) Mvaddch(y, x int, ch int) {
+func (window *Window) Mvaddch(y, x int, ch rune) {
 	C.mvwaddch(window.cwin, C.int(y), C.int(x), C.chtype(ch))
 }
 
