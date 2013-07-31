@@ -110,6 +110,23 @@ func (window *Window) PRefresh(pminrow,pmincol,sminrow,smincol, smaxrow, smaxcol
   C.prefresh(window.cwin,C.int(pminrow),C.int(pmincol),C.int(sminrow),C.int(smincol),C.int(smaxrow),C.int(smaxcol))
 }
 
+/* This function allows for multiple updates with more efficiency than refresh alone. Where you'd have to call refresh multiple times.
+Noutrefresh only updates the virtual screen and then the actual screen can be updated by calling Doupdate, which checks all pending changes.
+*/
+func (window *Window) NoutRefresh() {
+  C.wnoutrefresh(window.cwin)
+}
+
+// Same as NoutRefresh, but for pads.
+func (window *Window) PnoutRefresh(pminrow,pmincol,sminrow,smincol,smaxrow,smaxcol int) {
+  C.pnoutrefresh(window.cwin,C.int(pminrow),C.int(pmincol),C.int(sminrow),C.int(smincol),C.int(smaxrow),C.int(smaxcol))
+}
+
+// Compares the virtual screen to the physical screen and does the actual update.
+func Doupdate() {
+  C.doupdate()
+}
+
 // Finalizes curses.
 func End() {
     C.endwin()
@@ -231,6 +248,7 @@ func (window *Window) Clrtoeol() {
     C.wrapper_wclrtoeol(window.cwin)
 }
 
+// Clears the console.
 func Clear() int {
   return int(C.clear())
 }

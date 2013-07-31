@@ -14,6 +14,9 @@ Added
 * clear
 * newpad
 * prefresh
+* pnoutrefresh
+* wnoutrefresh
+* doupdate
 
 Sample
 -------
