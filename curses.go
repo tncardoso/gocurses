@@ -7,6 +7,7 @@ package gocurses
 // int wrapper_getmaxy(WINDOW* win) { return getmaxy(win); }
 // void wrapper_wclrtoeol(WINDOW* win) { wclrtoeol(win); }
 // void wrapper_wattrset(WINDOW* win, int attr) { wattrset(win, attr); }
+// int wrapper_color_pair(int i) { return COLOR_PAIR(i); }
 //
 import "C"
 import "unsafe"
@@ -49,8 +50,22 @@ func Noecho() {
 }
 
 // Hides cursor if 0, visible if 1, very visible if 2
-func Curs_set(i int) {
+func CursSet(i int) {
   C.curs_set(C.int(i))
+}
+
+// Starts color capabilities, check with HasColors if terminal has the capability.
+func StartColor() {
+  C.start_color()
+}
+
+// Checks if the terminal supports colors.
+func HasColors() bool {
+  return bool(C.has_colors())
+}
+
+func InitPair(pair, fg, bg int) {
+  C.init_pair(C.short(pair), C.short(fg), C.short(bg))
 }
 
 // Enable reading of function keys.
@@ -93,6 +108,10 @@ func (window *Window) Attroff(attr int) {
 
 func (window *Window) Attrset(attr int) {
 	C.wrapper_wattrset(window.cwin, C.int(attr))
+}
+
+func ColorPair(pair int) int {
+  return int(C.wrapper_color_pair(C.int(pair)))
 }
 
 // Refresh screen.

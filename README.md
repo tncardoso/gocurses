@@ -17,6 +17,9 @@ Added
 * pnoutrefresh
 * wnoutrefresh
 * doupdate
+* start_color
+* has_colors
+* init_pair
 
 Sample
 -------
