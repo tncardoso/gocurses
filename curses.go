@@ -7,6 +7,7 @@ package gocurses
 // int wrapper_getmaxy(WINDOW* win) { return getmaxy(win); }
 // void wrapper_wclrtoeol(WINDOW* win) { wclrtoeol(win); }
 // void wrapper_wattrset(WINDOW* win, int attr) { wattrset(win, attr); }
+// int wrapper_color_pair(int i) { return COLOR_PAIR(i); }
 //
 import "C"
 import "unsafe"
@@ -46,6 +47,25 @@ func Echo() {
 // Disables character echoing while reading.
 func Noecho() {
     C.noecho()
+}
+
+// Hides cursor if 0, visible if 1, very visible if 2
+func CursSet(i int) {
+  C.curs_set(C.int(i))
+}
+
+// Starts color capabilities, check with HasColors if terminal has the capability.
+func StartColor() {
+  C.start_color()
+}
+
+// Checks if the terminal supports colors.
+func HasColors() bool {
+  return bool(C.has_colors())
+}
+
+func InitPair(pair, fg, bg int) {
+  C.init_pair(C.short(pair), C.short(fg), C.short(bg))
 }
 
 // Enable reading of function keys.
@@ -90,6 +110,10 @@ func (window *Window) Attrset(attr int) {
 	C.wrapper_wattrset(window.cwin, C.int(attr))
 }
 
+func ColorPair(pair int) int {
+  return int(C.wrapper_color_pair(C.int(pair)))
+}
+
 // Refresh screen.
 func Refresh() {
     C.refresh()
@@ -98,6 +122,28 @@ func Refresh() {
 // Refresh given window.
 func (window *Window) Refresh() {
     C.wrefresh(window.cwin)
+}
+
+// Refresh given window, for pads.
+func (window *Window) PRefresh(pminrow,pmincol,sminrow,smincol, smaxrow, smaxcol int) {
+  C.prefresh(window.cwin,C.int(pminrow),C.int(pmincol),C.int(sminrow),C.int(smincol),C.int(smaxrow),C.int(smaxcol))
+}
+
+/* This function allows for multiple updates with more efficiency than refresh alone. Where you'd have to call refresh multiple times.
+Noutrefresh only updates the virtual screen and then the actual screen can be updated by calling Doupdate, which checks all pending changes.
+*/
+func (window *Window) NoutRefresh() {
+  C.wnoutrefresh(window.cwin)
+}
+
+// Same as NoutRefresh, but for pads.
+func (window *Window) PnoutRefresh(pminrow,pmincol,sminrow,smincol,smaxrow,smaxcol int) {
+  C.pnoutrefresh(window.cwin,C.int(pminrow),C.int(pmincol),C.int(sminrow),C.int(smincol),C.int(smaxrow),C.int(smaxcol))
+}
+
+// Compares the virtual screen to the physical screen and does the actual update.
+func Doupdate() {
+  C.doupdate()
 }
 
 // Finalizes curses.
@@ -111,6 +157,13 @@ func NewWindow(height, width, starty, startx int) *Window {
     w.cwin = C.newwin(C.int(height), C.int(width),
         C.int(starty), C.int(startx))
     return w
+}
+
+// Create new pad.
+func NewPad(nlines int, ncols int) *Window {
+  w := new(Window)
+  w.cwin = C.newpad(C.int(nlines), C.int(ncols))
+  return w
 }
 
 // Set box lines.
@@ -163,7 +216,7 @@ func Addch(ch int) {
 	C.addch(C.chtype(ch))
 }
 
-func Mvaddch(y, x int, ch int) {
+func Mvaddch(y, x int, ch rune) {
 	C.mvaddch(C.int(y), C.int(x), C.chtype(ch))
 }
 
@@ -183,7 +236,7 @@ func (window *Window) Addch(ch int) {
 	C.waddch(window.cwin, C.chtype(ch))
 }
 
-func (window *Window) Mvaddch(y, x int, ch int) {
+func (window *Window) Mvaddch(y, x int, ch rune) {
 	C.mvwaddch(window.cwin, C.int(y), C.int(x), C.chtype(ch))
 }
 
@@ -212,4 +265,9 @@ func Getmaxyx() (row, col int) {
 // Erases content from cursor to end of line inclusive.
 func (window *Window) Clrtoeol() {
     C.wrapper_wclrtoeol(window.cwin)
+}
+
+// Clears the console.
+func Clear() int {
+  return int(C.clear())
 }
